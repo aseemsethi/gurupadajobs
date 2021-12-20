@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "127345678520",
+    "project_id": "gurupadajobs",
+    "storage_bucket": "gurupadajobs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127345678520:android:c8720403f181ab7fc63c4d",
+        "android_client_info": {
+          "package_name": "com.aseemsethi.gurupadajobs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127345678520-cn7ehff8manb1k51sh4s63gc5to7uibj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aseemsethi.gurupadajobs",
+            "certificate_hash": "d2d368b7144a0a36066c4feb831ed109cd647654"
+          }
+        },
+        {
+          "client_id": "127345678520-jdqgreh7s56duddeark9988bhhfipi70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCycev3Hhy3oDQB-iOCzKeqE5Ipfi1h-Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127345678520-jdqgreh7s56duddeark9988bhhfipi70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

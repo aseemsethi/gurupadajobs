@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.inventory.InventoryFragment" >
+
+    <TableLayout
+        android:id="@+id/simpleTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+        <!-- stretch the second column of the layout
+        android:stretchColumns="0"-->
+        <!-- first row of the table layout-->
+        <TableRow
+            android:id="@+id/firstRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/itemID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#ffe599"
+                android:padding="18dip"
+                android:layout_weight=".6"
+                android:hint="Item Name"
+                android:textColor="#000"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/itemNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#fff2cc"
+                android:layout_weight=".4"
+                android:padding="18dip"
+                android:hint="0"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/secondRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <Button
+                android:id="@+id/barcode"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Bar"
+                android:layout_weight=".5"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+            <Button
+                android:id="@+id/qrcode"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="QR"
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".5"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/thirdRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/barCodeID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ffe599"
+                android:padding="18dip"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:hint="Bar Code"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40dp" />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/saveItem"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+        </TableRow>
+    </TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
