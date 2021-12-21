@@ -40,12 +40,17 @@ import com.aseemsethi.gurupadajobs.databinding.FragmentResumesBinding;
 import com.aseemsethi.gurupadajobs.databinding.FragmentReadBinding;
 import com.aseemsethi.gurupadajobs.ui.home.HomeViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -61,9 +66,9 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
-public class ReadFragment extends Fragment {
+public class ReadFragment extends Fragment implements View.OnClickListener {
     private HomeViewModel homeViewModel;
-    final String TAG = "Inventory: read";
+    final String TAG = "Resumes: read";
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.1F);
     String cid;
     FirebaseFirestore db;
@@ -73,6 +78,11 @@ public class ReadFragment extends Fragment {
     File FilesDir;
     OutputStreamWriter outputStreamWriter;
     boolean download = false;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    HashMap<Integer, String> allRefMap;
+    HashMap<Integer, String> allNameMap;
+
 
     private ReadViewModel readViewModel;
     private FragmentReadBinding binding;
@@ -105,6 +115,9 @@ public class ReadFragment extends Fragment {
                 Environment.DIRECTORY_DOWNLOADS);
         Log.d(TAG, "FilesDir Path1: " + FilesDir);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         binding = FragmentReadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         final Button btn = binding.viewBtn;
@@ -114,37 +127,10 @@ public class ReadFragment extends Fragment {
                 v.startAnimation(buttonClick);
                 hideKeyboard(getActivity());
                 int selectedId = binding.radioGroup.getCheckedRadioButtonId();
-                Log.d(TAG, "Selected: " + selectedId);
                 RadioButton rb = root.findViewById(selectedId);
                 String duration = rb.getText().toString();
-                if (duration.equals("Day")) {
-                    getDailyData();
-                } else {
-                    getAllData();
-                }
-            }
-        });
-        final Button btn2 = binding.downloadBtn;
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonClick);
-                hideKeyboard(getActivity());
-                download = true;
-                getContext().deleteFile("out.txt");
-                int selectedId = binding.radioGroup.getCheckedRadioButtonId();
-                Log.d(TAG, "Selected: " + selectedId);
-                RadioButton rb = root.findViewById(selectedId);
-                String duration = rb.getText().toString();
-                try {
-                    outputStreamWriter = new OutputStreamWriter(
-                            getContext().openFileOutput("out.txt",
-                                    Context.MODE_PRIVATE));
-                } catch (FileNotFoundException e) {
-                    Log.d(TAG, "Open failed.." + e.getMessage());
-                }
-                if (duration.equals("Day")) {
-                    getDailyData();
+                if (duration.equals("Search")) {
+                    //searchResume();
                 } else {
                     getAllData();
                 }
@@ -153,135 +139,125 @@ public class ReadFragment extends Fragment {
         return root;
     }
 
-    private void allWriteCompleted() {
-        if (download == true) {
-            download = false;
-        } else {
-            return;
-        }
-        try {
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            Log.d(TAG, "Close failed.." + e.getMessage());
-        }
-        GenericFileProvider.sendData(getContext(), "out.txt");
-    }
+    public void getFile(String name, String ref1) {
+        File FilesDir;
+        ref1 = ref1.replace("%20", " ");
+        StorageReference ref = storage.getReferenceFromUrl(ref1);
+        Log.d(TAG, "getFile: getRefFromURL: " + ref);
 
-    // /data/user/0/com.aseemsethi.inventory/files/out.txt
-    private void writeToFile(String date, String key, String num, String code) {
-        if (download == false)
-            return;
-        String str = date + ":" + key + ":" + num + ":" + code + "\n";
-        try {
-            outputStreamWriter.write(str);
-        } catch (IOException e) {
-            Log.d(TAG, "Write failed.." + e.getMessage());
+        FilesDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS);
+        File rootPath = new File(FilesDir, "resumes");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
         }
-    }
+        Log.d(TAG, "Filename: " + name);
+        final File localFile1 = new File(rootPath, name);
 
-    private class Plan {
-        private String itemName;
-        private ArrayList<String> items;
-
-        public Plan(String name, ArrayList<String> items) {
-            this.itemName = name;
-            this.items = items;
-        }
-    }
-
-    public void getDailyData() {
-        Log.d(TAG, "getData for cid: " + cid);
-        binding.tableD.removeAllViews();
-        setupTable();
-        db.collection(cid).document(currentDate)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG, "Doc data: " + document.getData());
-                                document.get("item");
-                                String date = document.getId();
-                                parseData(date, document.getData());
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                        }
-                        allWriteCompleted();
-                    }
-                });
+        ref.getFile(localFile1).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Log.d(TAG, "Resume downloaded..");
+                Toast.makeText(getContext(), "Resume downloaded to Downloads/resume folder...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d(TAG, "Resume not downloaded !!: " + exception.getMessage());
+            }
+        });
     }
 
     public void getAllData() {
         binding.tableD.removeAllViews();
         setupTable();
-        Log.d(TAG, "getData for cid: " + cid);
-        db.collection(cid)
+        db.collection("resumes")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Success...");
+                            allRefMap = new HashMap<>();
+                            allNameMap = new HashMap<>();
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, "Doc data: " + document.getData());
-                                document.get("item");
-                                String date = document.getId();
-                                parseData(date, document.getData());
+                                parseData(document.getData());
                             }
                         } else {
                             Log.w(TAG, "DB Access Error", task.getException());
                         }
-                        allWriteCompleted();
                     }
                 });
     }
 
-    public void parseData(String date, Map<String, Object> dataR) {
-        String num, code;
-        Log.d(TAG, "Date: " + date + ", Data: " + dataR);
+    // uri, email, exp
+    public void parseData(Map<String, Object> dataR) {
+        String name, email, exp, cat, link, ref;
 
         for (Map.Entry<String, Object> entry : dataR.entrySet()) {
-            Log.d(TAG, "Key = " + entry.getKey() +
-                    ", Value = " + entry.getValue());
+            //Log.d(TAG, "Name = " + entry.getKey() +
+            //        ", Data = " + entry.getValue());
+            name = entry.getKey();
             ArrayList<String> val = (ArrayList<String>) entry.getValue();
             for (String entry1 : val) {
-                Log.d(TAG, ", Value = " + entry1);
+            //    Log.d(TAG, ", Value = " + entry1);
             }
-            num = val.get(0);
-            code = val.get(1);
-            addToTable(date, entry.getKey(), num, code);
-            writeToFile(date, entry.getKey(), num, code);
+            link = val.get(0);
+            email = val.get(1);
+            exp = val.get(2);
+            cat = val.get(3);
+            ref = val.get(4);
+            Log.d(TAG, "name: " + name + ", email: " + email +
+                    ", Experience: " + exp + ", cat: " + cat + ", link: " + link +
+                    " Ref: " + ref);
+            addToTable(name, email, exp, cat, link, ref);
         }
     }
 
-    public void addToTable(String date, String key, String num, String code) {
+    public void addToTable(String name, String email, String exp, String cat,
+                           String link, String ref) {
+        allRefMap.put(rowNum, ref);
+        allNameMap.put(rowNum, name);
+
         TableRow tbrow = new TableRow(getContext());
         TextView t1v = new TextView(getContext());
         t1v.setText(rowNum.toString());
         t1v.setTextColor(Color.WHITE);
         t1v.setGravity(Gravity.CENTER);
         tbrow.addView(t1v);
+
         TextView t2v = new TextView(getActivity());
-        t2v.setText(key);
+        t2v.setText(name);
         t2v.setTextColor(Color.WHITE);
         t2v.setGravity(Gravity.CENTER);
         tbrow.addView(t2v);
+
         TextView t3v = new TextView(getActivity());
-        t3v.setText(num);
+        t3v.setText(email);
         t3v.setTextColor(Color.WHITE);
         t3v.setGravity(Gravity.CENTER);
         tbrow.addView(t3v);
         TextView t4v = new TextView(getActivity());
-        t4v.setText(code);
+
+        t4v.setText(exp);
         t4v.setTextColor(Color.WHITE);
         t4v.setGravity(Gravity.CENTER);
         tbrow.addView(t4v);
+        TextView t5v = new TextView(getActivity());
+
+        t5v.setText(cat);
+        t5v.setTextColor(Color.WHITE);
+        t5v.setGravity(Gravity.CENTER);
+        tbrow.addView(t5v);
+
+        tbrow.setOnClickListener(this); // set TableRow onClickListner
+        tbrow.setId(rowNum);
         stk.addView(tbrow);
+
+        rowNum++;
     }
 
     public void setupTable() {
@@ -290,21 +266,25 @@ public class ReadFragment extends Fragment {
         stk = binding.tableD;
         tbrow0 = new TableRow(getContext());
         TextView tv0 = new TextView(getActivity());
-        tv0.setText(" Sl.No ");
+        tv0.setText(" No ");
         tv0.setTextColor(Color.WHITE);
         tbrow0.addView(tv0);
         TextView tv1 = new TextView(getActivity());
-        tv1.setText(" Product ");
+        tv1.setText(" Name ");
         tv1.setTextColor(Color.WHITE);
         tbrow0.addView(tv1);
         TextView tv2 = new TextView(getActivity());
-        tv2.setText(" Qty ");
+        tv2.setText(" Email ");
         tv2.setTextColor(Color.WHITE);
         tbrow0.addView(tv2);
         TextView tv3 = new TextView(getActivity());
-        tv3.setText(" Code ");
+        tv3.setText(" Exp ");
         tv3.setTextColor(Color.WHITE);
         tbrow0.addView(tv3);
+        TextView tv4 = new TextView(getActivity());
+        tv4.setText(" Cat: ");
+        tv4.setTextColor(Color.WHITE);
+        tbrow0.addView(tv4);
         stk.addView(tbrow0);
     }
 
@@ -321,5 +301,15 @@ public class ReadFragment extends Fragment {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d(TAG, "onClick: " + v.getId());
+        String ref = allRefMap.get(v.getId());
+        String name = allNameMap.get(v.getId());
+
+        Log.d(TAG, "Name: " + name + ", Ref from hashMap: " + ref);
+        getFile(name, ref);
     }
 }

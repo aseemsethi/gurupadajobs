@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
-    final String TAG = "Jobs: HomeFrag";
+    final String TAG = "Resumes: HomeFrag";
     private static final int RC_SIGN_IN = 9001;
     private TextView mStatusTextView;
     // [START declare_auth]
@@ -231,8 +231,11 @@ public class HomeFragment extends Fragment implements
                     getPreferences(Context.MODE_PRIVATE);
             String nm = sharedPref.getString("cid", "10000");
             mStatusTextView.setText(getString(R.string.signed_in_fmt,
-                    user.getDisplayName() + ", Cid: " + nm));
+                    user.getDisplayName()));
             Log.d(TAG, "Signed in: " + user.getDisplayName());
+            homeViewModel.setUsername(user.getDisplayName());
+            homeViewModel.setEmail(user.getEmail());
+            Log.d(TAG, "Read back username: " + user.getDisplayName());
             binding.signInButton.setVisibility(View.GONE);
             binding.signOutAndDisconnect.setVisibility(View.VISIBLE);
         } else {

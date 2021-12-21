@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.inventory.InventoryFragment" >
+    tools:context=".ui.resumes.ResumesFragment" >
 
     <TableLayout
         android:id="@+id/simpleTableLayout"
@@ -22,19 +22,19 @@
             android:id="@+id/firstRow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/itemID"
+            <TextView
+                android:id="@+id/nameID"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#ffe599"
                 android:padding="18dip"
-                android:layout_weight=".6"
-                android:hint="Item Name"
+                android:layout_weight=".3"
+                android:hint="Name"
                 android:textColor="#000"
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/itemNo"
+                android:id="@+id/nameTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#fff2cc"
@@ -46,66 +46,149 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/Row2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/emailID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#ffe599"
+                android:padding="18dip"
+                android:layout_weight=".3"
+                android:hint="Email ID"
+                android:textColor="#000"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/emailTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:background="#fff2cc"
+                android:layout_weight=".4"
+                android:padding="18dip"
+                android:hint="0"
+                android:textColor="#000"
+                android:textSize="20dp" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/Row3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/expID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#ffe599"
+                android:padding="18dip"
+                android:layout_weight=".3"
+                android:hint="Years Exp"
+                android:textColor="#000"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/expTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:background="#fff2cc"
+                android:layout_weight=".4"
+                android:padding="18dip"
+                android:hint="0"
+                android:textColor="#000"
+                android:text="1"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
             android:id="@+id/secondRow"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
-            <Button
-                android:id="@+id/barcode"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:layout_width="0dp"
+            <RadioGroup
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Bar"
-                android:layout_weight=".5"
-                android:textColor="#000000"
-                android:textSize="18dp" />
-            <Button
-                android:id="@+id/qrcode"
-                style="@style/AppTheme.RoundedCornerMaterialButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="QR"
-                android:layout_marginLeft="10dp"
-                android:layout_weight=".5"
-                android:textColor="#000000"
-                android:textSize="18dp" />
+                app:layout_constraintBottom_toTopOf="@id/btns"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:text="SW"
+                    android:id="@+id/sw"
+                    android:checked="true"
+                    android:textSize="20dp" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Accnt"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/acc"
+                    android:checked="false"
+                    android:textSize="20dp"
+                    android:layout_weight="0.13" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HR"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/hr"
+                    android:checked="false"
+                    android:textSize="20dp"
+                    android:layout_weight="0.13" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admn"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/admin"
+                    android:checked="false"
+                    android:textSize="20dp"
+                    android:layout_weight="0.13" />
+            </RadioGroup>
         </TableRow>
 
         <TableRow
-            android:id="@+id/thirdRow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-            <TextView
-                android:id="@+id/barCodeID"
-                android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="20dp"
+
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/resumeBtn"
+                android:layout_width="0dp"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
                 android:layout_height="wrap_content"
+                android:text="Resume"
+                android:layout_weight=".3"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+            <TextView
+                android:id="@+id/resumeFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:background="#ffe599"
                 android:padding="18dip"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:hint="Bar Code"
+                android:layout_weight=".7"
+                android:hint="Name"
                 android:textColor="#000"
-                android:textSize="20dp" />
+                android:textSize="18dp" />
         </TableRow>
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="40dp" />
 
-        </TableRow>
         <TableRow
             android:layout_width="fill_parent"
-            android:gravity="center"
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/saveItem"
                 style="@style/AppTheme.RoundedCornerMaterialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Save"
                 android:textColor="#000000"
                 android:textSize="18dp" />

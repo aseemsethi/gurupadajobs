@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.inventory.InventoryFragment" >
+    tools:context=".ui.read.ReadFragment" >
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btns"
@@ -23,12 +23,14 @@
             <RelativeLayout
                 android:id="@+id/RelativeLayout1"
                 android:layout_width="fill_parent"
-                android:layout_gravity="center"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
                 android:orientation="vertical" >
                 <TableLayout
                     android:id="@+id/tableD"
+                    android:stretchColumns="*"
+                    android:showDividers="middle"
+                    android:divider="@drawable/divider"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="25dp"
                     android:layout_width="wrap_content"
@@ -40,31 +42,47 @@
         </HorizontalScrollView>
     </ScrollView>
 
-    <RadioGroup
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         app:layout_constraintBottom_toTopOf="@id/btns"
-        android:weightSum="1"
+        android:orientation="horizontal" >
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:background="#ffe599"
+        android:padding="12dip"
+        android:layout_weight=".6"
+        android:hint="Name"
+        android:textColor="#000" />
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight=".4"
         android:orientation="horizontal"
         android:id="@+id/radioGroup">
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="55dp"
-            android:text="Day"
+            android:text="Search"
             android:id="@+id/dayRB"
-            android:checked="true"
+            android:checked="false"
             android:textSize="20dp" />
-
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All"
             android:layout_marginLeft="20dp"
             android:id="@+id/allRB"
-            android:checked="false"
+            android:checked="true"
             android:textSize="20dp"
             android:layout_weight="0.13" />
     </RadioGroup>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/btns"
@@ -75,21 +93,12 @@
         android:layout_weight="1"
         android:background="@color/browser_actions_bg_grey">
         <LinearLayout
-            android:id="@+id/sign_out_and_disconnect"
+            android:id="@+id/btnView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:orientation="horizontal">
-            <Button
-                android:id="@+id/downloadBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Download"
-                android:textColor="#000000"
-                android:theme="@style/ThemeOverlay.MyDarkButton" />
-
             <Button
                 android:id="@+id/viewBtn"
                 android:layout_width="0dp"

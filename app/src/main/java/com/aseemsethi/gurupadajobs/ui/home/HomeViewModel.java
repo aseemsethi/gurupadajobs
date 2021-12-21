@@ -13,7 +13,10 @@ import androidx.lifecycle.ViewModel;
 public class HomeViewModel extends ViewModel {
     final String TAG = "Jobs: HomeView";
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<String> mText = new MutableLiveData<>();
+    private static MutableLiveData<String> username = new MutableLiveData<>();
+    private static MutableLiveData<String> email = new MutableLiveData<>();;
+
     private static boolean loggedin = false;
     private static MutableLiveData<String> status = new MutableLiveData<>();
 
@@ -26,7 +29,7 @@ public class HomeViewModel extends ViewModel {
         return mText;
     }
 
-    public boolean getLoggedin() { return loggedin; }
+    public static boolean getLoggedin() { return loggedin; }
     public void setLoggedin(Boolean val) {
         Log.d(TAG, "Loggedin Status:" + val);
         loggedin = val;
@@ -38,4 +41,18 @@ public class HomeViewModel extends ViewModel {
     public void setStatus(String val) {
         Log.d(TAG, val);
         status.setValue(val);}
+
+    public static String getUsername() {
+        return username.getValue();
+    }
+    public void setUsername(String val) {
+        Log.d(TAG, val);
+        username.setValue(val);}
+
+    public static String getEmail() {
+        return email.getValue();
+    }
+    public void setEmail(String val) {
+        Log.d(TAG, val);
+        email.setValue(val);}
 }
