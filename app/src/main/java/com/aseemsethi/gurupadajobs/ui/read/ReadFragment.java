@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -158,7 +159,8 @@ public class ReadFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 Log.d(TAG, "Resume downloaded..");
-                Toast.makeText(getContext(), "Resume downloaded to Downloads/resume folder...",
+                String str = "Resume " + name + " - at Downloads/resume";
+                Toast.makeText(getContext(), str,
                         Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -232,13 +234,13 @@ public class ReadFragment extends Fragment implements View.OnClickListener {
         TextView t2v = new TextView(getActivity());
         t2v.setText(name);
         t2v.setTextColor(Color.WHITE);
-        t2v.setGravity(Gravity.CENTER);
+        t2v.setGravity(Gravity.LEFT);
         tbrow.addView(t2v);
 
         TextView t3v = new TextView(getActivity());
         t3v.setText(email);
         t3v.setTextColor(Color.WHITE);
-        t3v.setGravity(Gravity.CENTER);
+        t3v.setGravity(Gravity.RIGHT);
         tbrow.addView(t3v);
         TextView t4v = new TextView(getActivity());
 
@@ -255,8 +257,15 @@ public class ReadFragment extends Fragment implements View.OnClickListener {
 
         tbrow.setOnClickListener(this); // set TableRow onClickListner
         tbrow.setId(rowNum);
-        stk.addView(tbrow);
+        //tbrow.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.row));
 
+        TableLayout.LayoutParams lp =
+                new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0,30,0,0);
+        tbrow.setLayoutParams(lp);
+
+        stk.addView(tbrow, lp);
         rowNum++;
     }
 
@@ -306,9 +315,9 @@ public class ReadFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Log.d(TAG, "onClick: " + v.getId());
+        v.setBackgroundResource(R.color.blue);
         String ref = allRefMap.get(v.getId());
         String name = allNameMap.get(v.getId());
-
         Log.d(TAG, "Name: " + name + ", Ref from hashMap: " + ref);
         getFile(name, ref);
     }

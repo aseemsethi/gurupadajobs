@@ -51,11 +51,11 @@
         android:orientation="horizontal" >
     <EditText
         android:id="@+id/search"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:background="#ffe599"
-        android:padding="12dip"
+        android:padding="6dip"
         android:layout_weight=".6"
         android:hint="Name"
         android:textColor="#000" />
@@ -67,20 +67,19 @@
         android:id="@+id/radioGroup">
         <RadioButton
             android:layout_width="wrap_content"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:text="Search"
             android:id="@+id/dayRB"
             android:checked="false"
-            android:textSize="20dp" />
+            android:layout_weight="0.2" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/allRB"
             android:checked="true"
-            android:textSize="20dp"
-            android:layout_weight="0.13" />
+            android:layout_weight="0.2" />
     </RadioGroup>
     </LinearLayout>
 
